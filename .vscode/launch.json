@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Docker Dev: 启动并附加 Grove",
+      "type": "node",
+      "request": "attach",
+      "address": "localhost",
+      "port": 9229,
+      "protocol": "inspector",
+      "continueOnAttach": true,
+      "restart": true,
+      "timeout": 60000,
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/app",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"],
+      "preLaunchTask": "Docker Debug: 启动 Grove",
+      "postDebugTask": "Docker Debug: 停止 Grove"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+services:
+  app:
+    command: sh -c "pnpm start:debug:docker"
+    ports:
+      - '9229:9229'

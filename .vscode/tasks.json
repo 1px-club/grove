@@ -1,0 +1,32 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Docker Debug: 启动 Grove",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.dev.yml -f docker-compose.dev.debug.yml up --build -d",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker Debug: 停止 Grove",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.dev.yml -f docker-compose.dev.debug.yml down",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Docker Debug: Grove 日志",
+      "type": "shell",
+      "command": "docker compose -f docker-compose.dev.yml -f docker-compose.dev.debug.yml logs -f app",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
