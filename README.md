@@ -32,3 +32,4 @@ Grove 是一个基于 PostgreSQL 的 Nest.js 项目，当前仅包含 `balance` 
 - [数据库管理与操作指南](./README.database.md)
 - [架构设计说明](./README.architecture.md)
 - [API 说明](./README.api.md)
+- [生产部署说明](./README.deploy.md)

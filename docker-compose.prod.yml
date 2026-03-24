@@ -1,0 +1,77 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-grove}
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${DB_USERNAME:-postgres} -d ${DB_NAME:-grove}',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - grove_internal
+
+  app:
+    image: grove-app:latest
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    expose:
+      - '3000'
+    ports:
+      - '127.0.0.1:${APP_PORT:-3000}:3000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'node -e "fetch(''http://127.0.0.1:'' + (process.env.APP_PORT || 3000) + ''/health'').then((res) => process.exit(res.ok ? 0 : 1)).catch(() => process.exit(1))"',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.docker.network=${TRAEFIK_NETWORK:-atmosphere_network}'
+      - 'traefik.http.routers.grove.rule=Host(`${APP_HOST:-api.1px.website}`)'
+      - 'traefik.http.routers.grove.entrypoints=${TRAEFIK_ENTRYPOINTS:-web}'
+      - 'traefik.http.routers.grove.middlewares=${TRAEFIK_MIDDLEWARES:-security-headers@file,compress@file}'
+      - 'traefik.http.routers.grove.tls=${TRAEFIK_TLS:-false}'
+      - 'traefik.http.routers.grove.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}'
+      - 'traefik.http.routers.grove-ip.rule=Host(`${APP_IP_ACCESS_HOST:-101.35.247.165}`)'
+      - 'traefik.http.routers.grove-ip.entrypoints=websecure'
+      - 'traefik.http.routers.grove-ip.middlewares=${TRAEFIK_MIDDLEWARES:-security-headers@file,compress@file}'
+      - 'traefik.http.routers.grove-ip.tls=true'
+      - 'traefik.http.routers.grove-ip.service=grove'
+      - 'traefik.http.routers.grove-ip-http.rule=Host(`${APP_IP_ACCESS_HOST:-101.35.247.165}`)'
+      - 'traefik.http.routers.grove-ip-http.entrypoints=web'
+      - 'traefik.http.routers.grove-ip-http.middlewares=grove-ip-https-redirect'
+      - 'traefik.http.routers.grove-ip-http.service=noop@internal'
+      - 'traefik.http.middlewares.grove-ip-https-redirect.redirectscheme.scheme=https'
+      - 'traefik.http.middlewares.grove-ip-https-redirect.redirectscheme.permanent=true'
+      - 'traefik.http.services.grove.loadbalancer.server.port=3000'
+    networks:
+      - grove_internal
+      - atmosphere_network
+
+volumes:
+  postgres_prod_data:
+
+networks:
+  grove_internal:
+    name: grove_internal
+  atmosphere_network:
+    external: true
+    name: ${TRAEFIK_NETWORK:-atmosphere_network}

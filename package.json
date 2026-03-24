@@ -16,6 +16,7 @@
     "migration:create": "pnpm db:typeorm migration:create src/infrastructure/database/migrations/$npm_config_name",
     "migration:generate": "pnpm db:typeorm migration:generate src/infrastructure/database/migrations/$npm_config_name",
     "migration:run": "pnpm db:typeorm migration:run",
+    "migration:run:prod": "typeorm -d dist/infrastructure/database/typeorm.datasource.js migration:run",
     "migration:revert": "pnpm db:typeorm migration:revert",
     "migration:show": "pnpm db:typeorm migration:show",
     "test": "jest --runInBand",
@@ -27,8 +28,9 @@
     "start:debug": "nest start --debug --watch",
     "start:debug:docker": "nest start --watch --exec \"node --enable-source-maps --inspect-brk=0.0.0.0:9229\"",
     "start:prod": "node dist/main",
+    "deploy:prod": "bash scripts/deploy.sh",
     "commitlint": "commitlint --edit",
-    "prepare": "husky"
+    "prepare": "command -v husky >/dev/null 2>&1 && husky || echo 'husky not found, skipping'"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.8",
