@@ -1,5 +1,6 @@
 # Grove
 
+[![CI](https://github.com/1px-club/grove/actions/workflows/ci.yml/badge.svg)](https://github.com/1px-club/grove/actions/workflows/ci.yml)
 [![Last Commit](https://img.shields.io/github/last-commit/1px-club/grove)](https://github.com/1px-club/grove/commits/main)
 [![NestJS](https://img.shields.io/badge/NestJS-11-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
