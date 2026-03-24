@@ -1,5 +1,13 @@
 # Grove
 
+[![Last Commit](https://img.shields.io/github/last-commit/1px-club/grove)](https://github.com/1px-club/grove/commits/main)
+[![NestJS](https://img.shields.io/badge/NestJS-11-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-9-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
+
+一个基于 Nest.js 和 PostgreSQL 的余额服务示例项目，聚焦并发安全的余额查询与交易发放能力。
+
 ## 概述
 
 Grove 是一个基于 PostgreSQL 的 Nest.js 项目，当前仅包含 `balance` 模块实现。
@@ -18,7 +26,6 @@ Grove 是一个基于 PostgreSQL 的 Nest.js 项目，当前仅包含 `balance` 
 
 - 首次拉取仓库，建议先阅读 [启动与运行指南](./README.setup.md)
 - [实现补充说明](./README.notes.md)
-- [启动与运行指南](./README.setup.md)
 - [测试说明](./README.testing.md)
 - [调试说明](./README.debug.md)
 - [数据库管理与操作指南](./README.database.md)
