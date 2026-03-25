@@ -181,9 +181,9 @@ psql -h localhost -U postgres -d grove -f init.sql
 
 [`init.sql`](./init.sql) 是示例数据脚本，不负责建表，包含：
 
-1. 插入 3 条示例用户
+1. 插入 10 条示例用户（`userId 1-10`）
 2. 对齐 `users.id` 序列
-3. 插入 3 条示例账户余额
+3. 插入 10 条示例账户余额，并同步到 Canopy 演示环境的默认账号范围
 
 因此：
 

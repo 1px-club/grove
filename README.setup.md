@@ -93,6 +93,7 @@ docker compose -f docker-compose.dev.yml exec app pnpm migration:run
 #### 5. 导入示例数据（如需按下文成功示例验证）
 
 如果你希望直接使用下方的成功示例，请先导入 [`init.sql`](./init.sql)：
+这份脚本会准备 `userId 1-10` 的本地演示账号。
 
 ```bash
 docker compose -f docker-compose.dev.yml exec -T postgres psql -U postgres -d grove < init.sql

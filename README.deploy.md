@@ -35,6 +35,8 @@ cp .env.production.example .env.production
   - `APP_HOST`：当前默认使用 `api.1px.website`
   - `APP_PUBLIC_URL`：当前默认使用 `https://api.1px.website`
   - `APP_IP_ACCESS_HOST`：备案审核期间用于临时 IP 访问，默认填服务器公网 IP
+  - `TRAEFIK_NETWORK`：默认 `atmosphere_network`
+  - `TRAEFIK_CERT_RESOLVER`：默认为 `letsencrypt`
 
 说明：
 
@@ -80,6 +82,13 @@ pnpm deploy:prod
 9. 启动 PostgreSQL
 10. 执行 `pnpm migration:run:prod`
 11. 启动应用并等待健康检查通过
+
+## 网关接入约定（Atmosphere）
+
+- 主路由使用 `websecure`，并强制 `tls=true`
+- Router 命名采用 `grove-api-main`（主域名）和 `grove-api-ip-main`（IP 临时访问）
+- Service 命名采用 `grove-api-main`
+- 默认挂载通用中间件：`security-headers@file,compress@file`
 
 ## 健康检查
 
