@@ -44,18 +44,32 @@ jobs:
           set -euo pipefail
 
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            FROM="${{ github.event.pull_request.base.sha }}"
-            TO="${{ github.event.pull_request.head.sha }}"
-          elif [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
-            TO="${{ github.sha }}"
-            FROM="$(git rev-list --max-parents=0 "$TO")"
-          else
-            FROM="${{ github.event.before }}"
-            TO="${{ github.sha }}"
-          fi
+            BASE_REF="refs/remotes/origin/${{ github.base_ref }}"
+            PR_HEAD="${{ github.event.pull_request.head.sha }}"
 
-          echo "Linting commit messages from $FROM to $TO"
-          npx commitlint --from "$FROM" --to "$TO" --verbose
+            git fetch --no-tags --depth=1 origin \
+              "+refs/heads/${{ github.base_ref }}:${BASE_REF}"
+
+            FROM="$(git merge-base "$PR_HEAD" "$BASE_REF")"
+            TO="$PR_HEAD"
+            echo "Linting pull request commit messages"
+            pnpm exec commitlint --from "$FROM" --to "$TO" --verbose
+          elif [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+            echo "Linting latest commit message"
+            git log -1 --format=%B "${{ github.sha }}" | pnpm exec commitlint --verbose
+          else
+            BEFORE="${{ github.event.before }}"
+            TO="${{ github.sha }}"
+
+            if git rev-parse --verify "${BEFORE}^{commit}" >/dev/null 2>&1 && \
+              git merge-base --is-ancestor "$BEFORE" "$TO"; then
+              echo "Linting push commit messages"
+              pnpm exec commitlint --from "$BEFORE" --to "$TO" --verbose
+            else
+              echo "Linting latest commit message"
+              git log -1 --format=%B "$TO" | pnpm exec commitlint --verbose
+            fi
+          fi
 
       - name: Check formatting
         run: pnpm format:check
